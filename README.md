@@ -1,23 +1,22 @@
-# Getting Started with Create React App
+# The end of the track (WIP) 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a web recreation of Gaya-Game's The End of the Track. 
 
-## Available Scripts
+# How to play: 
+  Objective: Be the first to move the ball to the opposite end of the board. The ball moves by jumping on top of your cubes, which move in a chess knight-like way. 
+  
+  Possible moves: 
+   - move a cube to an empty square as a knight would move on a chessboard, 
+     though a cube with a ball on it cannot move 
+     (2 squares horizontally + 1 square vertically or 1 square horizontally + 2 squares vertically)
+   - move your ball in any direction, as many times as you want, though it cannot pass over a cube
+
+## How to use/run: 
+This will eventually be hosted on a website, but for now you can run it on localhost. 
 
 In the project directory, you can run:
 
 ### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `npm run build`
 
