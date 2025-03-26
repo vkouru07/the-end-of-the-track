@@ -39,7 +39,8 @@ const Play = () => {
       setIsMyTurn(player === 'player1');
 
       // Listen for moves from Firebase
-      onChildAdded(ref(database, `games/${gameRoom}/moves`), (snapshot) => {
+      const movesRef = ref(database, `games/${gameRoom}/moves`);
+      const unsubscribe = onChildAdded(movesRef, (snapshot) => {
         const data = snapshot.val();
         if (data.player !== player) {
           const newBoard = board.map(row => row.slice());
@@ -49,6 +50,12 @@ const Play = () => {
           setIsMyTurn(true);
         }
       });
+
+      return () => {
+        socket.off('gameStart');
+        socket.off('moveMade');
+        unsubscribe();
+      };
     });
 
     socket.on('moveMade', (data) => {
@@ -63,7 +70,7 @@ const Play = () => {
       socket.off('gameStart');
       socket.off('moveMade');
     };
-  }, [board, gameRoom, player]);
+  }, [gameRoom, player]);
 
   const handlePieceClick = (row, col) => {
     if (isMyTurn && selectedPiece) {
@@ -84,8 +91,6 @@ const Play = () => {
       } else {
         setSelectedPiece(null);
       }
-    } else if (isMyTurn && board[row][col]) {
-      setSelectedPiece([row, col]);
     }
   };
 

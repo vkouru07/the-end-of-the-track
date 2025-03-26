@@ -17,53 +17,43 @@ const io = socketIo(server, {
 });
 
 const firebaseConfig = {
-
+    apiKey: "AIzaSyA3OsLB0k3UsWKrl9g6x3d3YyrMRg-MMos",
+    authDomain: "end-of-track.firebaseapp.com",
+    projectId: "end-of-track",
+    storageBucket: "end-of-track.firebasestorage.app",
+    messagingSenderId: "994956838580",
+    appId: "1:994956838580:web:36455085a22c5ed084f9e1",
+    measurementId: "G-SB7NJ4ZKK2"
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
 const database = getDatabase(firebaseApp);
 
-let waitingPlayer = null;
+const unmatchedUntimedUsers = queue(); 
+const games = {};
 
 io.on('connection', (socket) => {
     console.log('New client connected');
-
-    socket.on('findGame', () => {
-        if (waitingPlayer) {
-            // Match the new player with the waiting player
-            const gameRoom = `game-${waitingPlayer.id}-${socket.id}`;
-            socket.join(gameRoom);
-            waitingPlayer.join(gameRoom);
-
-            // Notify both players that the game has started
-            io.to(gameRoom).emit('gameStart', { gameRoom, player: 'player2' });
-            io.to(waitingPlayer.id).emit('gameStart', { gameRoom, player: 'player1' });
-
-            waitingPlayer = null;
+    socket.on('findUntimedGame', () => {
+        if (unmatchedUntimedUsers.length === 0) {
+            unmatchedUntimedUsers.enqueue(socket);
         } else {
-            // Set the current player as the waiting player
-            waitingPlayer = socket;
+            const player1 = unmatchedUntimedUsers.dequeue();
+            const player2 = socket;
+            const room = `room-${player1.id}-${player2.id}`;
+            games[room] = { player1, player2 };
+
+            player1.join(room);
+            player2.join(room);
+
+            socket.emit('gameStart', { room, player: 'player2' });
         }
-    });
-
-    socket.on('makeMove', (data) => {
-        // Log the move in Firebase
-        push(ref(database, `games/${data.gameRoom}/moves`), {
-            move: data.move,
-            player: data.player,
-            timestamp: serverTimestamp()
-        });
-
-        // Broadcast the move to the opponent
-        socket.to(data.gameRoom).emit('moveMade', data);
-    });
+    }); 
+    socket.on('makeMove', (data) => {}); 
 
     socket.on('disconnect', () => {
         console.log('Client disconnected');
-        if (waitingPlayer === socket) {
-            waitingPlayer = null;
-        }
-    });
-});
+    }); 
 
-server.listen(4000, () => console.log('Server is running on port 4000'));
+
+server.listen(4000, () => console.log('Server is running on port 4000'))});
