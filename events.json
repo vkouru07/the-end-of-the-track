@@ -1,0 +1,77 @@
+{
+    "events": {
+        "clientToServer": {
+            "findUntimedGame": {
+                "description": "request for untimed game",
+                "payload": {
+                    "playerId": "string"
+                }
+            },
+            "requestMakeMove": {
+                "description": "request to make a move",
+                "payload": {
+                    "playerId": "string",
+                    "gameId": "string",
+                    "move": {
+                        "from": {
+                            "x": "integer",
+                            "y": "integer"
+                        },
+                        "to": {
+                            "x": "integer",
+                            "y": "integer"
+                        }
+                    }
+                }
+            }
+        },
+        "serverToClient": {
+            "gameStarted": {
+                "description": "game has started",
+                "payload": {
+                    "gameId": "string",
+                    "player1ID": "string",
+                    "player2ID": "string"
+                }
+            },
+            "canMakeMove": {
+                "description": "player can make a move",
+                "payload": {
+                    "gameId": "string",
+                    "playerId": "string"
+                }
+            },
+            "moveMade": {
+                "description": "move has been made",
+                "payload": {
+                    "gameId": "string",
+                    "playerId": "string",
+                    "move": {
+                        "from": {
+                            "x": "integer",
+                            "y": "number"
+                        },
+                        "to": {
+                            "x": "number",
+                            "y": "number"
+                        }
+                    }
+                }
+            },
+            "gameOver": {
+                "description": "game is over",
+                "payload": {
+                    "gameId": "string",
+                    "winnerId": "string"
+                }
+            },
+            "playerLeft": {
+                "description": "player has left the game",
+                "payload": {
+                    "gameId": "string",
+                    "playerId": "string"
+                }
+            }
+        }
+    }
+}
