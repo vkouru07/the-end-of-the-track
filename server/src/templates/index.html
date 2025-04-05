@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+    </head>
+    <body>
+        <h1>You've reached the EOT server.</h1>
+
+        <button onclick="callPython('gameStarted')">gameStarted</button>
+        <div id="manipulate-this"></div>
+    </body>
+
+    <script>
+        function callPython(cmd) {
+          fetch('http://localhost:8000/' + cmd, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ someData: 'example' })
+          })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data.message);
+            alert(data.message);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+        }
+      </script>
+</html>

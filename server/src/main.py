@@ -1,14 +1,15 @@
 import socketio
 import eventlet
 import logging
+import cmd
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 sio = socketio.Server(cors_allowed_origins="*", async_mode="eventlet")
-app = socketio.WSGIApp(sio, static_files = {
-    "/": "server/src/index.html"
-})
+# app = socketio.WSGIApp(sio, static_files = {
+#     "/": "src/index.html"
+# })
 
 unmatched_players = []
 
@@ -48,10 +49,11 @@ async def findUntimedGame(sid, data):
     # }, to=sid)
 
 @sio.event
-async def makeMove(sid, data):
+async def requestMakeMove(sid, data):
     logger.info(f"Move made by {sid}: {data}")
     # await sio.emit("moveMade", data, skip_sid=sid)
 
 if __name__ == "__main__":
     logger.info("Starting server on http://localhost:8000")
-    eventlet.wsgi.server(eventlet.listen(("localhost", 8000)), app)
+    # eventlet.wsgi.server(eventlet.listen(("localhost", 8000)), app)
+    cmd.cmdapp.run(port=8000, debug=True)
