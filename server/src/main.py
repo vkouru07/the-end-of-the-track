@@ -1,15 +1,15 @@
 import socketio
 import eventlet
 import logging
-import cmd
+import socketio.async_server
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 sio = socketio.Server(cors_allowed_origins="*", async_mode="eventlet")
-# app = socketio.WSGIApp(sio, static_files = {
-#     "/": "src/index.html"
-# })
+app = socketio.WSGIApp(sio, static_files = {
+    "/": "src/templates/main.html"
+})
 
 unmatched_players = []
 
@@ -55,5 +55,5 @@ async def requestMakeMove(sid, data):
 
 if __name__ == "__main__":
     logger.info("Starting server on http://localhost:8000")
-    # eventlet.wsgi.server(eventlet.listen(("localhost", 8000)), app)
-    cmd.cmdapp.run(port=8000, debug=True)
+    eventlet.wsgi.server(eventlet.listen(("localhost", 8000)), app)
+    # cmd.cmdapp.run(port=8000, debug=True)

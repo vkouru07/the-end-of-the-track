@@ -2,6 +2,8 @@ import events from '../../events.json';
 import { io, Socket } from 'socket.io-client';
 import { Move } from './types';
 
+const SERVER_URL = 'http://localhost:8000';
+
 type FindUntimedGamePayload = typeof events.events.clientToServer.findUntimedGame.payload;
 type RequestMakeMovePayload = typeof events.events.clientToServer.requestMakeMove.payload;
 
@@ -10,7 +12,7 @@ let socket: Socket | null = null;
 
 const getSocket = (): Socket => {
     if (!socket) {
-        socket = io('http://localhost:3000'); // Replace with your server URL
+        socket = io(SERVER_URL); 
     }
     return socket;
 };
@@ -62,3 +64,5 @@ socket.on('gameOver', (payload) => {
 socket.on('playerLeft', (payload) => {
     console.log('Player left:', payload);
 });
+
+export {findUntimedGame, requestMakeMove};

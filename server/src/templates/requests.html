@@ -4,9 +4,14 @@
         <meta charset="utf-8" />
     </head>
     <body>
-        <h1>You've reached the EOT server.</h1>
+        <h1>You've reached the EOT requests server.</h1>
+        <h3>Click a button to manually emit the following events to the client. </h3>
 
         <button onclick="callPython('gameStarted')">gameStarted</button>
+        <button onclick="callPython('canMakeMove')">canMakeMove</button>
+        <button onclick="callPython('moveMade')">moveMade</button>
+        <button onclick="callPython('gameOver')">gameOver</button>
+
         <div id="manipulate-this"></div>
     </body>
 
