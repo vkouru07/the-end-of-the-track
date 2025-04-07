@@ -7,7 +7,7 @@ CORS(cmdapp, origins="http://localhost:3000")
 
 @cmdapp.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('requests.html')
 
 @cmdapp.route('/gameStarted', methods=['POST'])
 def run_python():

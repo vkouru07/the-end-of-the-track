@@ -28,7 +28,8 @@ const findUntimedGame = (playerID:string): void => {
     const payload: FindUntimedGamePayload = {
         playerId: playerID
     }; 
-    socket.emit('findGame', payload);
+    console.log("findUntimedGame, payload ", payload);
+    socket.emit('findUntimedGame', payload);
 };
 
 const requestMakeMove = (playerId:string, gameID:string, move:Move): void => {
@@ -44,7 +45,8 @@ const requestMakeMove = (playerId:string, gameID:string, move:Move): void => {
             to: { x: move.to.x.toString(), y: move.to.y.toString() }
         }
     }; 
-    socket.emit('makeMove', payload);
+    console.log("requestMakeMove, payload ", payload);
+    socket.emit('requestMakeMove', payload);
 };
 
 // SERVER TO CLIENT

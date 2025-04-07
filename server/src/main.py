@@ -6,7 +6,10 @@ import socketio.async_server
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-sio = socketio.Server(cors_allowed_origins="*", async_mode="eventlet")
+# eventlet.monkey_patch()
+
+sio = socketio.Server(cors_allowed_origins=["http://localhost:3000", "*"], async_mode="eventlet")
+# sio = socketio.AsyncServer() 
 app = socketio.WSGIApp(sio, static_files = {
     "/": "src/templates/main.html"
 })
@@ -15,6 +18,7 @@ unmatched_players = []
 
 @sio.event
 async def connect(sid, environ):
+    # print ("SOMETHING HAPPENED")
     logger.info(f"Client connected: {sid}")
 
 @sio.event
@@ -25,9 +29,13 @@ async def disconnect(sid):
     except:
         pass 
 
-@sio.event
-async def findUntimedGame(sid, data):
+# @sio.event
+@sio.on ("findUntimedGame")
+def findUntimedGame(sid, data):
+    # print ("SOMETHING HAPPENED")
     logger.info(f"Find game request from {sid}: {data}")
+    if sid in unmatched_players:
+        return 
     if unmatched_players:
         opponent_sid = unmatched_players.pop(0)
         while not opponent_sid:
@@ -42,6 +50,7 @@ async def findUntimedGame(sid, data):
         unmatched_players.append(sid)
         logger.info(f"No match found, added {sid} to unmatched players")
         
+    logger.info(f"Unmatched players: {unmatched_players}")
     # await sio.emit("gameStarted", {
     #     "gameId": "12345",
     #     "player1ID": data["playerId"],
